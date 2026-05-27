@@ -27,6 +27,22 @@ def get_professores():
 def get_cursos():
     return df_cursos.to_dict(orient="records")
 
+@app.post("/sobenome")
+def post_sobenome(sobenome: str):
+    return {"nome em caixa alta": sobenome.upper()}
+
+@app.post("/descenome")
+def post_descenome(descenome: str):
+    return {"nome em caixa baixa": descenome.lower()}
+
+@app.get('/alunos/{nome}/notas')
+def get_notas(nome: str):
+    aluno = df_alunos[df_alunos['nome'] == nome]
+    if aluno.empty:
+        return {"error": "Aluno não encontrado"}
+    notas = aluno[['nota']].to_dict(orient='records')[0]
+    return {"notas": notas}
+
 
 if __name__ == "__main__":
     import uvicorn
